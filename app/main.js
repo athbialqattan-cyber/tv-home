@@ -43,10 +43,12 @@
   }
   function launch(id,name){
     if(!id){log('no id for '+name);return;}
-    try{tizen.application.launch(id,function(){},function(e){log('launch failed: '+e.message);});}
-    catch(e){log('launch error: '+e);}
+    log('launching '+name+' ('+id+') ...');
+    try{tizen.application.launch(id,function(){log('launch ok: '+name);},function(e){log('launch failed: '+name+' '+id+' -> '+(e&&e.name)+': '+(e&&e.message));});}
+    catch(e){log('launch exception: '+name+' -> '+(e&&e.name)+': '+(e&&e.message||e));}
   }
   document.addEventListener('keydown',function(e){
+    log('key '+e.keyCode+' focus='+focusIdx);
     // RTL shelf: first tile is on the right, so Left moves to the next tile
     if(e.keyCode===37)setFocus(focusIdx+1);
     else if(e.keyCode===39)setFocus(focusIdx-1);
