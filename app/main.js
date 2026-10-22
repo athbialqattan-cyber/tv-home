@@ -17,7 +17,7 @@
 
   var installed=[];
   try{
-    tizen.application.getAppsInfo(function(list){installed=list;build();},function(e){log('getAppsInfo: '+e.message);build();});
+    tizen.application.getAppsInfo(function(list){installed=list;build();},function(e){log('getAppsInfo error: '+(e&&e.message));build();});
   }catch(e){log('no tizen api: '+e);build();}
 
   var focusIdx=0,tiles=[];
@@ -34,7 +34,7 @@
       shelf.appendChild(el);tiles.push({el:el,id:id,name:a.name});
     });
     setFocus(0);
-    log('apps: '+installed.length+' | ids: '+tiles.map(function(t){return t.name+'='+t.id;}).join(' , '));
+    log('apps: '+installed.length+' | tizen: '+(typeof tizen)+' | ids: '+tiles.map(function(t){return t.name+'='+t.id;}).join(' , '));
   }
   function setFocus(i){
     if(!tiles.length)return;
@@ -58,5 +58,5 @@
     .then(function(r){return r.json();}).then(function(j){
       var t=j.data.timings;
       document.getElementById('prayer').innerHTML='الفجر '+t.Fajr+'<br>الظهر '+t.Dhuhr+'<br>العصر '+t.Asr+'<br>المغرب '+t.Maghrib+'<br>العشاء '+t.Isha;
-    }).catch(function(e){document.getElementById('prayer').textContent='';});
+    }).catch(function(e){document.getElementById('prayer').textContent='';log('prayer error: '+(e&&e.message||e));});
 })();
